@@ -9,15 +9,54 @@ plugin NotYAMLConfig => {file => 'config.yml'};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
+    state $cdb  = app->config('db');
     state $data = V073::Data->new(
-        db_file     => app->home->rel_file(app->config('db')->{file}),
-        schema_file => app->home->rel_file(app->config('db')->{schema_file}),
+        db_file     => $ENV{V073DB} // app->home->rel_file($cdb->{file}),
+        schema_file =>                 app->home->rel_file($cdb->{schema_file}),
     );
     return $data->helper($rs);
 };
 
-get '/' => sub ($c) {
-    $c->render(json => {answer => 42});
+# Token helper helper
+sub _generate_token ($len) {
+    my @chars = ('A'..'Z', '0'..'9');
+    return join '' => map $chars[rand @chars] => 1 .. $len;
+}
+
+# Helper to generate new unique tokens
+helper token => sub ($self) {
+    my $token   = _generate_token($self->config('token_length'));
+    my $voting  = $self->data('Voting')->count({token => $token});
+    my $vote    = $self->data('Token')->count({name => $token});
+    $token      = $self->token if $voting or $vote;
+    return $token;
+};
+
+post '/token' => sub ($c) {
+    my $token = $c->param('token');
+
+    # Is it a voting ("admin") token?
+    if (my $voting = $c->data('Voting')->search({token => $token})->first) {
+        $c->session(voting => $voting->id);
+        return $c->render(json => {
+            type    => 'voting',
+            voting  => {$voting->get_columns},
+        });
+    }
+
+    # Is it a vote token?
+    if (my $t = $c->data('Token')->search({name => $token})->first) {
+        $c->session(token => $t->name);
+        return $c->render(json => {
+            type    => 'vote',
+            token   => $t->name,
+            voting  => {$t->voting->get_columns},
+        });
+    }
+
+    # It's nothing!
+    return $c->render(status => 404, json => {message => 'Token not found'});
+
 };
 
 app->start;

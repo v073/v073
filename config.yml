@@ -1,3 +1,5 @@
 db:
     file:           db
     schema_file:    schema.sql
+
+token_length: 9
