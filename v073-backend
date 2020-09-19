@@ -5,7 +5,7 @@ use lib 'lib';
 use V073::Data;
 
 # Load configuration data
-plugin 'NotYAMLConfig';
+plugin NotYAMLConfig => {file => 'config.yml'};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
