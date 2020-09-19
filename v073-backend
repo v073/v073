@@ -1,8 +1,22 @@
 #!/usr/bin/env perl
-use Mojolicious::Lite;
+use Mojolicious::Lite -signatures;
 
-get '/' => sub {
-    my $c = shift;
+use lib 'lib';
+use V073::Data;
+
+# Load configuration data
+plugin 'NotYAMLConfig';
+
+# Prepare data model
+helper data => sub ($self, $rs) {
+    state $data = V073::Data->new(
+        db_file     => app->home->rel_file(app->config('db')->{file}),
+        schema_file => app->home->rel_file(app->config('db')->{schema_file}),
+    );
+    return $data->helper($rs);
+};
+
+get '/' => sub ($c) {
     $c->render(json => {answer => 42});
 };
 
