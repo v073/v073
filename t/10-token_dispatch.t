@@ -8,7 +8,7 @@ use Mojo::File qw(curfile tempfile);
 $ENV{V073DB} = tempfile;
 
 # Prepare lite app test
-my $app = curfile->dirname->sibling('v073-backend');
+my $app = curfile->dirname->sibling('backend');
 my $t = Test::Mojo->new($app);
 $t->app->log->level('warn');
 
