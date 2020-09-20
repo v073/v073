@@ -11,6 +11,7 @@ WriteMakefile(
         'DBIx::Class'                   => '0.08',
         'DBIx::Class::Schema::Loader'   => '0.07',
         'Mojolicious'                   => '8.56',
+        'Mojolicious::Plugin::Webpack'  => '0.13',
     },
     test                => {TESTS => 't/*.t'},
 );

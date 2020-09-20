@@ -7,6 +7,9 @@ use V073::Data;
 # Load configuration data
 plugin NotYAMLConfig => {file => 'config.yml'};
 
+# Serve the frontend
+plugin Webpack => {process => [qw(js css vue)]};
+
 # Prepare data model
 helper data => sub ($self, $rs) {
     state $cdb  = app->config('db');
@@ -32,6 +35,8 @@ helper token => sub ($self) {
     return $token;
 };
 
+get '/' => 'frontend';
+
 post '/token' => sub ($c) {
     my $token = $c->param('token');
 
@@ -56,7 +61,18 @@ post '/token' => sub ($c) {
 
     # It's nothing!
     return $c->render(status => 404, json => {message => 'Token not found'});
-
 };
 
 app->start;
+
+__DATA__
+
+@@ frontend.html.ep
+<!doctype html>
+<html>
+    <head><title>v073</title>
+        %= asset 'frontend.js'
+        %= asset 'frontend.css'
+    </head>
+    <body><div id="v073-frontend"></div></body>
+</html>
