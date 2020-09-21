@@ -8,7 +8,12 @@ use V073::Data;
 plugin NotYAMLConfig => {file => 'config.yml'};
 
 # Serve the frontend
-plugin Webpack => {process => [qw(js css vue)]};
+plugin Webpack => {
+    process         => [qw(js css vue v073)],
+    dependencies    => {v073 => [qw(
+        vue-material
+    )]},
+};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
@@ -70,9 +75,12 @@ __DATA__
 @@ frontend.html.ep
 <!doctype html>
 <html>
-    <head><title>v073</title>
+    <head>
+        %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
+        <title>v073</title>
         %= asset 'frontend.js'
         %= asset 'frontend.css'
+        %= stylesheet '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
     </head>
     <body><div id="v073-frontend"></div></body>
 </html>
