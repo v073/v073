@@ -18,6 +18,7 @@ sub _init ($self) {
     }
 
     # Connect DBIC schema loader
+    local $ENV{SCHEMA_LOADER_BACKCOMPAT} = 1;
     return V073::Data::DB->connect($self->dsn, '', '', {sqlite_unicode => 1});
 }
 
