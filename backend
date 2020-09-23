@@ -42,30 +42,23 @@ helper token => sub ($self) {
 
 get '/' => 'frontend';
 
-post '/token' => sub ($c) {
+post '/token-type' => sub ($c) {
     my $token = $c->param('token');
 
+    # No token at all?
+    return $c->render(status => 403, text => 'No token given')
+        unless defined $token;
+
     # Is it a voting ("admin") token?
-    if (my $voting = $c->data('Voting')->search({token => $token})->first) {
-        $c->session(voting => $voting->id);
-        return $c->render(json => {
-            type    => 'voting',
-            voting  => {$voting->get_columns},
-        });
-    }
+    return $c->render(json => {type => 'voting'})
+        if $c->data('Voting')->count({token => $token});
 
     # Is it a vote token?
-    if (my $t = $c->data('Token')->search({name => $token})->first) {
-        $c->session(token => $t->name);
-        return $c->render(json => {
-            type    => 'vote',
-            token   => $t->name,
-            voting  => {$t->voting->get_columns},
-        });
-    }
+    return $c->render(json => {type => 'vote'})
+        if $c->data('Token')->count({name => $token});
 
-    # It's nothing!
-    return $c->render(status => 404, json => {message => 'Token not found'});
+    # Neither?
+    return $c->render(status => 404, text => 'Token not found');
 };
 
 app->start;
