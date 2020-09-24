@@ -71,9 +71,11 @@ __DATA__
     <head>
         %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
         <title>v073</title>
-        %= asset 'frontend.js'
         %= asset 'frontend.css'
         %= stylesheet '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
     </head>
-    <body><div id="v073-frontend"></div></body>
+    <body>
+        <div id="v073-frontend"></div>
+        %= asset 'frontend.js'
+    </body>
 </html>

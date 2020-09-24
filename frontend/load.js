@@ -6,9 +6,7 @@ import V073 from './V073.vue'
 
 Vue.use(VueMaterial)
 
-window.addEventListener("load", function() {
-    new Vue({
-        el: '#v073-frontend',
-        render: h => h(V073)
-    })
-});
+new Vue({
+    el: '#v073-frontend',
+    render: h => h(V073)
+})
