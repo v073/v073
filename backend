@@ -11,6 +11,7 @@ plugin NotYAMLConfig => {file => 'config.yml'};
 plugin Webpack => {
     process         => [qw(js css vue v073)],
     dependencies    => {v073 => [qw(
+        vue-router
         vue-material
     )]},
 };
