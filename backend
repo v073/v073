@@ -67,16 +67,18 @@ app->start;
 __DATA__
 
 @@ frontend.html.ep
+% my $viewport = 'width=device-width,initial-scale=1,minimal-ui';
+% my $font_url = '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons';
 <!doctype html>
 <html>
     <head>
-        %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
-        <title>v073</title>
+        %= t meta => (name => 'viewport', content => $viewport)
+        %= t title => 'v073'
         %= asset 'frontend.css'
-        %= stylesheet '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
+        %= stylesheet $font_url
     </head>
     <body>
-        <div id="v073-frontend"></div>
+        %= t div => (id => 'v073-frontend')
         %= asset 'frontend.js'
     </body>
 </html>
