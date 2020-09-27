@@ -20,8 +20,8 @@ plugin Webpack => {
 helper data => sub ($self, $rs) {
     state $cdb  = app->config('db');
     state $data = V073::Data->new(
-        db_file     => $ENV{V073DB} // app->home->rel_file($cdb->{file}),
-        schema_file =>                 app->home->rel_file($cdb->{schema_file}),
+        db_file     => $ENV{V073_DB} // app->home->rel_file($cdb->{file}),
+        schema_file => app->home->rel_file($cdb->{schema_file}),
     );
     return $data->helper($rs);
 };

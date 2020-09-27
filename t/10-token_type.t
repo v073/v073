@@ -5,11 +5,11 @@ use Test::Mojo;
 use Mojo::File qw(curfile tempfile);
 
 # Inject a test database
-$ENV{V073DB} = tempfile;
+$ENV{V073_DB} = tempfile;
 
 # Prepare lite app test
 my $app = curfile->dirname->sibling('backend');
-my $t = Test::Mojo->new($app);
+my $t   = Test::Mojo->new($app);
 $t->app->log->level('warn');
 
 subtest 'No token' => sub {
