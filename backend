@@ -85,6 +85,28 @@ post '/token-type' => sub ($c) {
     return $c->render(status => 404, text => 'Token not found');
 };
 
+group { under '/types';
+
+    get '/' => sub ($c) { $c->redirect_to('default_types') };
+    get '/default' => sub ($c) {
+
+        # Retrieve types with options as simple data structure
+        my @types = $c->data('Type')->search({}, {
+            order_by => 'options.id',
+            prefetch => 'options',
+        });
+
+        # Compactify: {name => [Option texts]...}
+        my %type = map { my $type = $_;
+            $type->name => [ map $_->text => $type->options ]
+        } @types;
+
+        # Done
+        $c->render(json => \%type);
+
+    } => 'default_types';
+};
+
 app->start;
 
 __DATA__

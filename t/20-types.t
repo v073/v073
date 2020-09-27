@@ -57,4 +57,20 @@ subtest 'Correct initial types' => sub {
     ]}, 'Correct foo/bar/baz options';
 };
 
+subtest 'Default types retrieval' => sub {
+
+    subtest 'Try /types' => sub {
+        $t->get_ok('/types')
+            ->status_is(302)
+            ->header_is(location => '/types/default');
+    };
+
+    subtest 'Get JSON data' => sub {
+        $t->get_ok('/types/default')
+            ->status_is(200)
+            ->json_is('/yes_no'  => [qw( Yes No Enthaltung )])
+            ->json_is('/foo_bar' => [qw( Foo Bar Baz Enthaltung )]);
+    };
+};
+
 done_testing;
