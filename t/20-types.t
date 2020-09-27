@@ -15,7 +15,7 @@ db:
 token_length: 9
 
 voting:
-    abstention: Abstention
+    abstention: Enthaltung
     default_options:
         yes_no:
             - Yes
@@ -25,12 +25,14 @@ voting:
             - Bar
             - Baz
 EOF
-$ENV{V073_CONFIG_FILE}  = $tmp_config_file;
-$ENV{V073_DB_FILE}      = $tmp_db_file;
 
 # Prepare lite app test
 my $app = curfile->dirname->sibling('backend');
-my $t   = Test::Mojo->new($app);
+my $t   = do {
+    local $ENV{V073_CONFIG_FILE} = $tmp_config_file;
+    local $ENV{V073_DB_FILE}     = $tmp_db_file;
+    Test::Mojo->new($app);
+};
 $t->app->log->level('warn');
 
 subtest 'Correct initial types' => sub {
@@ -44,14 +46,14 @@ subtest 'Correct initial types' => sub {
     is_deeply $yn => {name => 'yes_no', options => [
         {text => 'Yes',         type => 'yes_no'},
         {text => 'No',          type => 'yes_no'},
-        {text => 'Abstention',  type => 'yes_no'},
+        {text => 'Enthaltung',  type => 'yes_no'},
     ]}, 'Correct yes/no options';
 
     is_deeply $fb => {name => 'foo_bar', options => [
         {text => 'Foo',         type => 'foo_bar'},
         {text => 'Bar',         type => 'foo_bar'},
         {text => 'Baz',         type => 'foo_bar'},
-        {text => 'Abstention',  type => 'foo_bar'},
+        {text => 'Enthaltung',  type => 'foo_bar'},
     ]}, 'Correct foo/bar/baz options';
 };
 
