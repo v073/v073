@@ -3,3 +3,13 @@ db:
     schema_file:    schema.sql
 
 token_length: 9
+
+voting:
+    abstention: Abstention
+    default_options:
+        yes_no:
+            - Yes
+            - No
+        pro_contra:
+            - For
+            - Against
