@@ -4,17 +4,10 @@ use Mojolicious::Lite -signatures;
 use lib 'lib';
 use V073::Data;
 
+### Preparations
+
 # Load configuration data
 plugin NotYAMLConfig => {file => 'config.yml'};
-
-# Serve the frontend
-plugin Webpack => {
-    process         => [qw(js css vue v073)],
-    dependencies    => {v073 => [qw(
-        vue-router
-        vue-material
-    )]},
-};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
@@ -40,6 +33,18 @@ helper token => sub ($self) {
     $token      = $self->token if $voting or $vote;
     return $token;
 };
+
+### Serve the frontend
+
+plugin Webpack => {
+    process         => [qw(js css vue v073)],
+    dependencies    => {v073 => [qw(
+        vue-router
+        vue-material
+    )]},
+};
+
+### Actions
 
 get '/' => 'frontend';
 
