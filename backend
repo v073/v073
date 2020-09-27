@@ -7,7 +7,9 @@ use V073::Data;
 ### Preparations
 
 # Load configuration data
-plugin NotYAMLConfig => {file => 'config.yml'};
+plugin NotYAMLConfig => {
+    file => $ENV{V073_CONFIG_FILE} // 'config.yml',
+};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
@@ -18,6 +20,22 @@ helper data => sub ($self, $rs) {
     );
     return $data->helper($rs);
 };
+
+# Insert default types/options from configuration
+my $default_options = app->config('voting')->{default_options};
+while (my ($type_name, $option_names) = each %$default_options) {
+
+    # Already exists
+    next if app->data('Type')->count({name => $type_name});
+
+    # Create type and options
+    my $type = app->data('Type')->create({name => $type_name});
+    $type->create_related(options => {text => $_}) for @$option_names;
+
+    # Add abstention option
+    my $abstention = app->config('voting')->{abstention};
+    $type->create_related(options => {text => $abstention});
+}
 
 # Token helper helper
 sub _generate_token ($len) {
