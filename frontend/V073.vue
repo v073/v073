@@ -29,7 +29,11 @@
             </md-app-drawer>
 
             <md-app-content>
-                <router-view/>
+                <div class="md-layout md-alignment-center">
+                    <div class="md-layout-item md-small-size-100 md-medium-size-75 md-large-size-50 md-xlarge-size-40">
+                        <router-view/>
+                    </div>
+                </div>
             </md-app-content>
 
         </md-app>
