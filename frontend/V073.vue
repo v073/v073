@@ -12,14 +12,14 @@
             <md-app-drawer :md-active.sync="menuVisible">
                 <md-list>
 
-                    <md-list-item>
+                    <md-list-item @click="menuVisible = false">
                         <md-icon>home</md-icon>
                         <span class="md-list-item-text">
                             <router-link to="/">Start</router-link>
                         </span>
                     </md-list-item>
 
-                    <md-list-item>
+                    <md-list-item @click="menuVisible = false">
                         <md-icon>info</md-icon>
                         <span class="md-list-item-text">
                             <router-link to="/about">About v073</router-link>
