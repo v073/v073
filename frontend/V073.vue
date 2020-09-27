@@ -31,7 +31,7 @@
 
             <md-app-content>
                 <div class="md-layout md-alignment-center">
-                    <div class="md-layout-item md-small-size-100 md-medium-size-75 md-large-size-50 md-xlarge-size-40">
+                    <div class="md-layout-item md-small-size-100 md-medium-size-75 md-large-size-50 md-xlarge-size-40" id="include-container">
                         <router-view/>
                     </div>
                 </div>
@@ -51,6 +51,9 @@
 .md-drawer {
     width: 230px;
     max-width: calc(100vw - 125px);
+}
+#include-container {
+    padding-top: 1em
 }
 </style>
 
