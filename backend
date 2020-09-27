@@ -4,17 +4,10 @@ use Mojolicious::Lite -signatures;
 use lib 'lib';
 use V073::Data;
 
+### Preparations
+
 # Load configuration data
 plugin NotYAMLConfig => {file => 'config.yml'};
-
-# Serve the frontend
-plugin Webpack => {
-    process         => [qw(js css vue v073)],
-    dependencies    => {v073 => [qw(
-        vue-router
-        vue-material
-    )]},
-};
 
 # Prepare data model
 helper data => sub ($self, $rs) {
@@ -41,8 +34,22 @@ helper token => sub ($self) {
     return $token;
 };
 
+### Serve the frontend
+
+plugin Webpack => {
+    process         => [qw(js css vue v073)],
+    dependencies    => {v073 => [qw(
+        vue-router
+        vue-material
+    )]},
+};
+
+### Actions
+
+# Serve the frontend app (DATA section at the end of this file)
 get '/' => 'frontend';
 
+# Decide whether a given token is for admins or voters
 post '/token-type' => sub ($c) {
     my $token = $c->param('token');
 
@@ -61,6 +68,8 @@ post '/token-type' => sub ($c) {
     # Neither?
     return $c->render(status => 404, text => 'Token not found');
 };
+
+### Done
 
 app->start;
 
