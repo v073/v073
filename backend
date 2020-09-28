@@ -11,6 +11,10 @@ plugin NotYAMLConfig => {
     file => $ENV{V073_CONFIG_FILE} // 'config.yml',
 };
 
+# Serve app icons from artwork submodule
+delete app->static->extra->{'favicon.ico'};
+push @{app->static->paths}, app->home->rel_file('artwork/logo');
+
 # Prepare data model
 helper data => sub ($self, $rs) {
     state $cdb  = app->config('db');
@@ -115,15 +119,15 @@ app->start;
 __DATA__
 
 @@ frontend.html.ep
-% my $viewport = 'width=device-width,initial-scale=1,minimal-ui';
-% my $font_url = '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons';
 <!doctype html>
 <html>
     <head>
-        %= t meta => (name => 'viewport', content => $viewport)
+        %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
         %= t title => 'v073'
         %= asset 'frontend.css'
-        %= stylesheet $font_url
+        %= stylesheet '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons';
+        %= t link => (rel => 'shortcut icon', type => 'image/png', href => url_for('/logo_notext_128.png'))
+        %= t link => (rel => 'icon', type => 'image/svg+xml', sizes => 'any', href => url_for('/logo_notext.svg'))
     </head>
     <body>
         %= t div => (id => 'v073-frontend')
