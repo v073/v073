@@ -9,12 +9,12 @@ Vue.use(VueMaterial)
 
 import V073 from './V073.vue'
 
-import Start    from './components/Start.vue'
-import About    from './components/About.vue'
+import TokenForm    from './components/TokenForm.vue'
+import AboutV073    from './components/AboutV073.vue'
 
 const router = new VueRouter({routes: [
-    {path: '/',         component: Start},
-    {path: '/about',    component: About},
+    {path: '/',         component: TokenForm},
+    {path: '/about',    component: AboutV073},
 ]})
 
 new Vue({
