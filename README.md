@@ -43,6 +43,13 @@ $ ./backend webpack
 $ hypnotoad backend
 ```
 
+### Docker deployment
+
+```bash
+$ docker build -t v073 .
+$ docker run -tip 8000:4000 -e PORT=4000 v073
+```
+
 ## Author and License
 
 Copyright (c) [Mirko Westermeier][mirko] ([\@memowe][mgh], [mirko@westermeier.de][mmail])
