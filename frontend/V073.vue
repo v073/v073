@@ -3,22 +3,23 @@
         <md-app md-mode="reveal">
 
             <md-app-toolbar class="md-accent">
+                <md-button class="md-icon-button" @click="menuVisible = ! menuVisible">
+                    <md-icon>menu</md-icon>
+                </md-button>
                 <span class="md-title">v073</span>
             </md-app-toolbar>
 
-            <md-app-drawer md-permanent="full">
-                <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
-
+            <md-app-drawer :md-active.sync="menuVisible">
                 <md-list>
 
-                    <md-list-item>
+                    <md-list-item @click="menuVisible = false">
                         <md-icon>home</md-icon>
                         <span class="md-list-item-text">
                             <router-link to="/">Start</router-link>
                         </span>
                     </md-list-item>
 
-                    <md-list-item>
+                    <md-list-item @click="menuVisible = false">
                         <md-icon>info</md-icon>
                         <span class="md-list-item-text">
                             <router-link to="/about">About v073</router-link>
@@ -29,7 +30,11 @@
             </md-app-drawer>
 
             <md-app-content>
-                <router-view/>
+                <div class="md-layout md-alignment-center">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-90 md-medium-size-70 md-large-size-50 md-xlarge-size-40" id="include-container">
+                        <router-view/>
+                    </div>
+                </div>
             </md-app-content>
 
         </md-app>
@@ -40,13 +45,22 @@
 .md-app {
     max-height: 100vh;
 }
+.md-title {
+    font-weight: bold;
+}
 .md-drawer {
     width: 230px;
     max-width: calc(100vw - 125px);
+}
+#include-container {
+    padding-top: 1em
 }
 </style>
 
 <script>
 export default {
+    data: () => ({
+        menuVisible: false
+    })
 }
 </script>

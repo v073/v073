@@ -7,13 +7,14 @@ import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 Vue.use(VueMaterial)
 
-import V073     from './V073.vue'
-import Start    from './Start.vue'
-import About    from './About.vue'
+import V073 from './V073.vue'
+
+import TokenForm    from './components/TokenForm.vue'
+import AboutV073    from './components/AboutV073.vue'
 
 const router = new VueRouter({routes: [
-    {path: '/',         component: Start},
-    {path: '/about',    component: About},
+    {path: '/',         component: TokenForm},
+    {path: '/about',    component: AboutV073},
 ]})
 
 new Vue({

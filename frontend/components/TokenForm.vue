@@ -1,5 +1,4 @@
 <template>
-    <p>Start</p>
 </template>
 
 <script>
