@@ -31,7 +31,7 @@
 
             <md-app-content>
                 <div class="md-layout md-alignment-center">
-                    <div class="md-layout-item md-small-size-100 md-medium-size-75 md-large-size-50 md-xlarge-size-40" id="include-container">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-90 md-medium-size-70 md-large-size-50 md-xlarge-size-40" id="include-container">
                         <router-view/>
                     </div>
                 </div>
