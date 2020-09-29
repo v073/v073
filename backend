@@ -61,6 +61,7 @@ helper token => sub ($self) {
 plugin Webpack => {
     process         => [qw(js css vue v073)],
     dependencies    => {v073 => [qw(
+        axios
         vue-router
         vue-material
     )]},
