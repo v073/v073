@@ -182,6 +182,21 @@ group { under '/voting';
         });
 
     } => 'create_voting';
+
+    get '/:token' => sub ($c) {
+
+        # Try to find voting
+        my $voting = $c->data('Voting')->find({token => $c->param('token')});
+        return $c->render(status => 404, text => 'Voting not found')
+            unless $voting;
+
+        # Found
+        $c->render(json => {
+            type    => $voting->get_column('type'),
+            map {$_ => $voting->$_} qw(text token started closed),
+        });
+
+    } => 'get_voting';
 };
 
 ### Done

@@ -31,6 +31,13 @@ my $t   = do {
 };
 $t->app->log->level('warn');
 
+subtest 'Try to retrieve non-existant voting' => sub {
+    my $token = $t->app->token;
+    $t->get_ok("/voting/$token")
+        ->status_is(404)
+        ->content_is('Voting not found');
+};
+
 subtest 'Create voting' => sub {
 
     subtest 'with unknown type' => sub {
@@ -53,9 +60,14 @@ subtest 'Create voting' => sub {
     };
 
     subtest 'Check' => sub {
-        ok 1; # TODO
+        $t->get_ok("/voting/$token")
+            ->status_is(200)
+            ->json_is('/token'      => $token)
+            ->json_is('/type'       => 'yes_no')
+            ->json_is('/text'       => 'Foo Bar')
+            ->json_is('/started'    => 0)
+            ->json_is('/closed'     => 0);
     };
-
 };
 
 done_testing;
