@@ -102,6 +102,24 @@ post '/token-type' => sub ($c) {
 
 group { under '/types';
 
+    post '/' => sub ($c) {
+
+        # Create the type
+        my $type_name   = $c->create_free_type_name;
+        my $type        = $c->data('Type')->create({name => $type_name});
+
+        # Create the initial option (abstention)
+        my $abst = $c->config('voting')->{abstention};
+        $type->create_related(options => {text => $abst});
+
+        # Send compacted type data
+        $c->render(json => {
+            name    => $type->name,
+            options => [ map $_->text => $type->options ],
+        });
+
+    } => 'create_type';
+
     get '/' => sub ($c) { $c->redirect_to('default_types') };
     get '/default' => sub ($c) {
 
@@ -138,24 +156,6 @@ group { under '/types';
         });
 
     } => 'get_type';
-
-    post '/' => sub ($c) {
-
-        # Create the type
-        my $type_name   = $c->create_free_type_name;
-        my $type        = $c->data('Type')->create({name => $type_name});
-
-        # Create the initial option (abstention)
-        my $abst = $c->config('voting')->{abstention};
-        $type->create_related(options => {text => $abst});
-
-        # Send compacted type data
-        $c->render(json => {
-            name    => $type->name,
-            options => [ map $_->text => $type->options ],
-        });
-
-    } => 'create_type';
 };
 
 ### Done
