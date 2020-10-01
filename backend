@@ -56,6 +56,15 @@ helper token => sub ($self) {
     return $token;
 };
 
+# Helper to generate free type names
+helper create_free_type_name => sub ($self, $len = 20) {
+    my @chars       = ('a'..'z', '0'..'9');
+    my $type_name   = 'free_' . join '' => map $chars[rand @chars] => 1 .. $len;
+    my $type        = $self->data('Type')->count({name => $type_name});
+    $type_name      = $self->create_free_type_name if $type;
+    return $type_name;
+};
+
 ### Serve the frontend
 
 plugin Webpack => {
@@ -112,6 +121,42 @@ group { under '/types';
         $c->render(json => \%type);
 
     } => 'default_types';
+
+    get '/:name' => sub ($c) {
+        my $type_name = $c->param('name');
+
+        # Try to retrieve the type
+        my $type = $c->data('Type')->find($type_name, {
+            order_by => 'options.id',
+            prefetch => 'options',
+        });
+        return $c->render(status => 404, text => 'Type not found') unless $type;
+
+        # Send compacted type data
+        $c->render(json => {
+            name    => $type->name,
+            options => [ map $_->text => $type->options ],
+        });
+
+    } => 'get_type';
+
+    post '/' => sub ($c) {
+
+        # Create the type
+        my $type_name   = $c->create_free_type_name;
+        my $type        = $c->data('Type')->create({name => $type_name});
+
+        # Create the initial option (abstention)
+        my $abst = $c->config('voting')->{abstention};
+        $type->create_related(options => {text => $abst});
+
+        # Send compacted type data
+        $c->render(json => {
+            name    => $type->name,
+            options => [ map $_->text => $type->options ],
+        });
+
+    } => 'create_type';
 };
 
 ### Done

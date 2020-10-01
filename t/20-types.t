@@ -73,4 +73,47 @@ subtest 'Default types retrieval' => sub {
     };
 };
 
+subtest 'Single type retrieval' => sub {
+
+    subtest 'No such type' => sub {
+        my $tn = $t->app->create_free_type_name;
+        $t->get_ok("/types/$tn")
+            ->status_is(404)
+            ->content_is('Type not found');
+    };
+
+    subtest 'Yes/no data' => sub {
+        $t->get_ok('/types/yes_no')
+            ->status_is(200)
+            ->json_is('/name'       => 'yes_no')
+            ->json_is('/options'    => [qw( Yes No Enthaltung )])
+    };
+
+    subtest 'Foo/bar/baz data' => sub {
+        $t->get_ok('/types/foo_bar')
+            ->status_is(200)
+            ->json_is('/name'       => 'foo_bar')
+            ->json_is('/options'    => [qw( Foo Bar Baz Enthaltung )])
+    };
+};
+
+subtest 'Type creation' => sub {
+
+    my $type_name;
+    subtest 'Request data' => sub {
+        $t->post_ok('/types')
+            ->status_is(200)
+            ->json_is('/options' => ['Enthaltung']);
+        $type_name = $t->tx->res->json('/name');
+        like $type_name => qr/^free_[a-z0-9]+$/, 'Valid type name';
+    };
+
+    subtest 'Check creation' => sub {
+        $t->get_ok("/types/$type_name")
+            ->status_is(200)
+            ->json_is('/name'       => $type_name)
+            ->json_is('/options'    => ['Enthaltung']);
+    };
+};
+
 done_testing;
