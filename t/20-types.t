@@ -97,4 +97,23 @@ subtest 'Single type retrieval' => sub {
     };
 };
 
+subtest 'Type creation' => sub {
+
+    my $type_name;
+    subtest 'Request data' => sub {
+        $t->post_ok('/types')
+            ->status_is(200)
+            ->json_is('/options' => ['Enthaltung']);
+        $type_name = $t->tx->res->json('/name');
+        like $type_name => qr/^free_[a-z0-9]+$/, 'Valid type name';
+    };
+
+    subtest 'Check creation' => sub {
+        $t->get_ok("/types/$type_name")
+            ->status_is(200)
+            ->json_is('/name'       => $type_name)
+            ->json_is('/options'    => ['Enthaltung']);
+    };
+};
+
 done_testing;
