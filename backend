@@ -159,6 +159,31 @@ group { under '/types';
     } => 'create_type';
 };
 
+group { under '/voting';
+
+    post '/' => sub ($c) {
+
+        # Try to find voting type
+        my $type = $c->data('Type')->find($c->param('type'));
+        return $c->render(status => 404, text => 'Type not found') unless $type;
+
+        # Create and retrieve voting
+        my $token = $c->token;
+        $type->create_related(votings => {
+            token   => $token,
+            text    => $c->param('text'),
+        });
+        my $voting = $c->data('Voting')->find({token => $token});
+
+        # Send simplified data
+        $c->render(json => {
+            type    => $voting->get_column('type'),
+            map {$_ => $voting->$_} qw(text token started closed),
+        });
+
+    } => 'create_voting';
+};
+
 ### Done
 app->start;
 
