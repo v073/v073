@@ -107,7 +107,9 @@ group { under '/types';
     get '/default' => sub ($c) {
 
         # Retrieve types with options as simple data structure
-        my @types = $c->data('Type')->search({}, {
+        my @types = $c->data('Type')->search({
+            name     => {-not_like => 'free_%'},
+        }, {
             order_by => 'options.id',
             prefetch => 'options',
         });
