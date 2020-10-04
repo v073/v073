@@ -37,30 +37,86 @@
             </md-card-content>
 
             <md-card-actions>
-                <md-button class="md-raised md-primary">
+                <md-button class="md-raised md-primary" @click="createVoting">
                     Create voting
                 </md-button>
             </md-card-actions>
 
         </md-card>
+
+        <md-dialog :md-active="state == 'waiting'" id="create-voting-waiting">
+            <md-dialog-title>Creating voting...</md-dialog-title>
+            <md-dialog-content>
+                <md-progress-spinner md-mode="indeterminate"/>
+            </md-dialog-content>
+        </md-dialog>
+
+        <md-dialog :md-active="state == 'done' || state == 'really'" id="create-voting-success">
+            <md-dialog-title>Voting created!</md-dialog-title>
+            <md-dialog-content>
+                <p>Your voting administration token is</p>
+                <p id="voting-administration-token" :class="{'really': state == 'really'}">{{ token }}</p>
+                <p>Please write it down!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button v-if="state == 'done'" @click="state = 'really'" class="md-primary md-raised">
+                    OK
+                </md-button>
+                <md-button v-if="state == 'really'" to="/" class="md-accent md-raised">
+                    OK!!!
+                </md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </template>
+
+<style scoped>
+#create-voting-waiting {
+    text-align: center;
+}
+#create-voting-success {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+#voting-administration-token {
+    font-size: 2em;
+}
+#voting-administration-token.really {
+    font-weight: bold;
+    animation: blinkyblink .5s infinite;
+}
+@keyframes blinkyblink {
+    0%      { color: black }
+    25%     { color: red }
+    50%     { color: yellow }
+    75%     { color: green }
+    100%    { color: blue }
+}
+</style>
 
 <script>
 import axios from 'axios'
 export default {
     data: () => ({
+        state: 'form', // form, waiting, done, really
         form: {
             types: {},
             text: '',
             type: null,
             tokens: 5,
         },
+        token: null,
     }),
     mounted() {
         axios.get('/types/default').then(res => {
             this.form.types = res.data
         })
+    },
+    methods: {
+        createVoting() {
+            this.state = 'waiting';
+            setTimeout(() => {this.state = 'done'; this.token = 'xnorfzt'}, 1000);
+        },
     },
 }
 </script>
