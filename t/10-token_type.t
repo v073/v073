@@ -19,7 +19,7 @@ subtest 'No token' => sub {
 };
 
 subtest 'Unknown token' => sub {
-    $t->post_ok('/token-type', form => {token => $t->app->token})
+    $t->post_ok('/token-type', json => {token => $t->app->token})
         ->status_is(404)
         ->content_is('Token not found');
 };
@@ -46,13 +46,13 @@ subtest 'Known tokens' => sub {
     };
 
     subtest 'Voting token' => sub {
-        $t->post_ok('/token-type', form => {token => $voting_token})
+        $t->post_ok('/token-type', json => {token => $voting_token})
             ->status_is(200)
             ->json_is('/type' => 'voting');
     };
 
     subtest 'Voter token' => sub {
-        $t->post_ok('/token-type', form => {token => $voter_token})
+        $t->post_ok('/token-type', json => {token => $voter_token})
             ->status_is(200)
             ->json_is('/type' => 'vote');
     };

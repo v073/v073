@@ -41,7 +41,7 @@ subtest 'Try to retrieve non-existant voting' => sub {
 subtest 'Create voting' => sub {
 
     subtest 'with unknown type' => sub {
-        $t->post_ok('/voting', form => {
+        $t->post_ok('/voting', json => {
             text => 'xnorfzt',
             type => $t->app->create_free_type_name,
         })->status_is(404)->content_is('Type not found');
@@ -49,7 +49,7 @@ subtest 'Create voting' => sub {
 
     my $token;
     subtest 'with default type' => sub {
-        $t->post_ok('/voting', form => {text => 'Foo Bar', type => 'yes_no'})
+        $t->post_ok('/voting', json => {text => 'Foo Bar', type => 'yes_no'})
             ->status_is(200)
             ->json_is('/type'       => 'yes_no')
             ->json_is('/text'       => 'Foo Bar')
