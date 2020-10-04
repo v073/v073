@@ -82,7 +82,7 @@ get '/' => 'frontend';
 
 # Decide whether a given token is for admins or voters
 post '/token-type' => sub ($c) {
-    my $token = $c->param('token');
+    my $token = $c->req->json('/token');
 
     # No token at all?
     return $c->render(status => 403, text => 'No token given')
