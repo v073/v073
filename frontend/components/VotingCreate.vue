@@ -114,8 +114,26 @@ export default {
     },
     methods: {
         createVoting() {
+
+            // Prepare
             this.state = 'waiting';
-            setTimeout(() => {this.state = 'done'; this.token = 'xnorfzt'}, 1000);
+            let type = this.form.type;
+
+            // free: create a new type
+            let creationPromise = (this.form.type == 'free') ?
+                axios.post('/types').then(res => res.data.name)
+                : Promise.resolve(this.form.type);
+
+            // Create the voting
+            creationPromise
+                .then(type => axios.post('/voting', {
+                    type: type,
+                    text: this.form.text,
+                }))
+                .then(res => {
+                    this.token = res.data.token;
+                    this.state = 'done';
+                });
         },
     },
 }
