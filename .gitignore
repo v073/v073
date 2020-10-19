@@ -16,9 +16,3 @@ Makefile*
 *META*
 MANIFEST
 MANIFEST.bak
-
-# Frontend artifacts
-node_modules
-package*.json
-webpack.config.js
-public/asset

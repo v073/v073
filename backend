@@ -65,17 +65,6 @@ helper create_free_type_name => sub ($self, $len = 20) {
     return $type_name;
 };
 
-### Serve the frontend
-
-plugin Webpack => {
-    process         => [qw(js css vue v073)],
-    dependencies    => {v073 => [qw(
-        axios
-        vue-router
-        vue-material
-    )]},
-};
-
 ### Actions
 
 # Serve the frontend app (DATA section at the end of this file)
@@ -203,22 +192,3 @@ group { under '/voting';
 
 ### Done
 app->start;
-
-__DATA__
-
-@@ frontend.html.ep
-<!doctype html>
-<html>
-    <head>
-        %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
-        %= t title => 'v073'
-        %= asset 'frontend.css'
-        %= stylesheet '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons';
-        %= t link => (rel => 'shortcut icon', type => 'image/png', href => url_for('/logo_notext_128.png'))
-        %= t link => (rel => 'icon', type => 'image/svg+xml', sizes => 'any', href => url_for('/logo_notext.svg'))
-    </head>
-    <body>
-        %= t div => (id => 'v073-frontend')
-        %= asset 'frontend.js'
-    </body>
-</html>
