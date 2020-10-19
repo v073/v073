@@ -1,26 +1,15 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
-Vue.use(VueMaterial)
-
-import V073 from './V073.vue'
-
-import TokenForm    from './components/TokenForm.vue'
-import VotingCreate from './components/VotingCreate.vue'
-import AboutV073    from './components/AboutV073.vue'
-
 const router = new VueRouter({routes: [
-    {path: '/',         component: TokenForm},
-    {path: '/create',   component: VotingCreate},
-    {path: '/about',    component: AboutV073},
+    {path: '/',         name: 'Start',  component: httpVueLoader('./components/TokenForm.vue')},
+    {path: '/create',   name: 'Create', component: httpVueLoader('./components/Create.vue')},
+    {path: '/about',    name: 'About',  component: httpVueLoader('./components/About.vue')},
 ]})
 
 new Vue({
     router,
-    el: '#v073-frontend',
-    render: h => h(V073)
+    el: '#frontend',
+    components: {
+        'V073': httpVueLoader('./App.vue'),
+    },
 })

@@ -1,22 +1,12 @@
 <template>
-    <md-card md-with-hover>
-
-        <md-card-header>
-            <div class="md-title">v073</div>
-        </md-card-header>
-
-        <md-card-content>
-            <!-- TODO -->
-        </md-card-content>
-
-        <md-card-actions>
-            <md-button to="/create">Create a new voting</md-button>
-        </md-card-actions>
-
-    </md-card>
+    <div id="tokenform">
+        <h1>Welcome to v073!</h1>
+        <router-link :to="{name: 'Create'}" tag="button">Create a new voting</router-link>
+    </div>
 </template>
 
 <script>
-export default {
+module.exports = {
+    name: 'TokenForm',
 }
 </script>

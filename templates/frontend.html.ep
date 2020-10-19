@@ -4,13 +4,17 @@
         %= t title => 'v073'
         %= t meta => (name => 'viewport', content => 'width=device-width,initial-scale=1,minimal-ui')
         %= stylesheet 'https://cdn.jsdelivr.net/npm/sanitize.css'
-        %= script 'https://cdn.jsdelivr.net/npm/vue'
-        %= script 'https://cdn.jsdelivr.net/npm/vue-router'
-        %= script 'https://cdn.jsdelivr.net/npm/http-vue-loader'
+        %= javascript 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js'
+        %= javascript 'https://cdn.jsdelivr.net/npm/vue-router'
+        %= javascript 'https://cdn.jsdelivr.net/npm/http-vue-loader'
+        %= javascript 'https://cdn.jsdelivr.net/npm/axios'
+        %= javascript 'load.js', (defer => undef)
         %= t link => (rel => 'shortcut icon', type => 'image/png', href => url_for('/logo_notext_128.png'))
         %= t link => (rel => 'icon', type => 'image/svg+xml', sizes => 'any', href => url_for('/logo_notext.svg'))
     </head>
     <body>
-        %= t div => (id => 'v073-frontend')
+        <div id="frontend">
+            <v073></v073>
+        </div>
     </body>
 </html>

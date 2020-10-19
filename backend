@@ -65,6 +65,9 @@ helper create_free_type_name => sub ($self, $len = 20) {
     return $type_name;
 };
 
+# Enable frontend loading from frontend directory
+push @{app->static->paths}, app->home->rel_file('frontend');
+
 ### Actions
 
 # Serve the frontend app (DATA section at the end of this file)
